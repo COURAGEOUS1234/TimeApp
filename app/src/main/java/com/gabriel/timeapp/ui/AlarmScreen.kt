@@ -192,7 +192,7 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
 
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize(), color = Bg) {
-            Column(Modifier.fillMaxSize().scanlines()) {
+            Column(Modifier.fillMaxSize().hudGrid()) {
                 HazardStripe(Modifier.fillMaxWidth().height(8.dp))
                 Column(
                     Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(20.dp),
