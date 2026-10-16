@@ -9,7 +9,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.gabriel.timeapp"
+        applicationId = "com.gabrielmutseriwa.terminalhour"
         minSdk = 26
         targetSdk = 36
         versionCode = 3

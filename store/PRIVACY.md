@@ -24,4 +24,4 @@ Terminal Hour is a clock app (alarms, world clock, stopwatch, timer, pomodoro an
 
 **Changes.** Updates to this policy will be posted at this address.
 
-**Contact.** [ADD CONTACT EMAIL BEFORE PUBLISHING]
+**Contact.** gabrielmutseriwa@gmail.com

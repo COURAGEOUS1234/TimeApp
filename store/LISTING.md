@@ -10,7 +10,7 @@
 - **Short description (≤80):** Alarm, world clock, timer & pomodoro with sci-fi HUD themes and home widgets.
 - **Category:** Tools · **Tags:** Clock, Alarm clock, Productivity
 - **Graphics:** `store/icon-512.png`, `store/feature-graphic-1024x500.png`, your screenshots
-- **Privacy policy URL:** https://github.com/COURAGEOUS1234/TimeApp/blob/main/store/PRIVACY.md (add a contact email first)
+- **Privacy policy URL:** https://github.com/COURAGEOUS1234/TimeApp/blob/main/store/PRIVACY.md
 
 **Full description:**
 
@@ -55,9 +55,29 @@ PRIVATE BY DESIGN
 
 ## Policy notes
 - Do not mention the films the themes are inspired by, in the listing or screenshots (trademark/impersonation policy).
-- Package name `com.gabriel.timeapp` becomes permanent on first upload.
+- Package name `com.gabrielmutseriwa.terminalhour` becomes permanent on first upload.
 
 ## Release flow
 1. GitHub ▸ Actions ▸ latest run ▸ download **TerminalHour-play-bundle** (`app-release.aab`, signed with the upload key once secrets are set).
 2. Play Console ▸ Testing ▸ Closed testing ▸ Create release ▸ upload the `.aab`. Choose **Play App Signing** (Google holds the app key; the upload key can be reset if lost).
 3. Add testers' emails, share the opt-in link, wait 14 days, then Dashboard ▸ Apply for production.
+
+## Upload key (do once, on your PC)
+Needs Java (Android Studio includes it). In a terminal:
+
+```
+keytool -genkeypair -v -keystore terminalhour-upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000
+```
+
+Pick a strong password and answer the name prompts. Back the `.jks` file and password up somewhere safe (not in the repo).
+
+Then GitHub ▸ TimeApp ▸ Settings ▸ Secrets and variables ▸ Actions ▸ New repository secret, four times:
+
+| Secret | Value |
+|---|---|
+| `TH_KEYSTORE_B64` | base64 of the file. PowerShell: `[Convert]::ToBase64String([IO.File]::ReadAllBytes("terminalhour-upload.jks")) \| Set-Clipboard`, then paste |
+| `TH_STORE_PASS` | the keystore password |
+| `TH_KEY_ALIAS` | `upload` |
+| `TH_KEY_PASS` | the key password (same as keystore password unless you set a different one) |
+
+Re-run the latest Actions build. The log says "Release will be signed with the upload key" when it worked.
