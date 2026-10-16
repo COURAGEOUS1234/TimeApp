@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <com.gabriel.timeapp.HazardStripeView
+            android:id="@+id/hazardTop"
             android:layout_width="match_parent"
             android:layout_height="28dp" />
 
@@ -37,6 +38,7 @@
             android:textSize="16sp" />
 
         <TextClock
+            android:id="@+id/alertClock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -74,11 +76,13 @@
         <Space android:layout_width="match_parent" android:layout_height="24dp" />
 
         <com.gabriel.timeapp.HazardStripeView
+            android:id="@+id/hazardBottom"
             android:layout_width="match_parent"
             android:layout_height="28dp" />
     </LinearLayout>
 
     <com.gabriel.timeapp.ScanlineView
+        android:id="@+id/scan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"

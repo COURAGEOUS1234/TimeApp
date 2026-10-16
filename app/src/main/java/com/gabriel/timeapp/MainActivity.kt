@@ -10,6 +10,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.mutableIntStateOf
 import com.gabriel.timeapp.ui.AppRoot
+import com.gabriel.timeapp.ui.ThemeState
+import com.gabriel.timeapp.ui.Themes
 import com.gabriel.timeapp.ui.TerminalTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Notifs.ensure(this)
         Store.migrate(this)
+        ThemeState.palette = Themes.of(Store.settings(this).theme)
         pendingTab.intValue = intent?.getIntExtra(EXTRA_TAB, -1) ?: -1
         if (Build.VERSION.SDK_INT >= 33 &&
             checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
@@ -54,6 +57,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         resumeTick.intValue++
+        ThemeState.palette = Themes.of(Store.settings(this).theme)
         applyKeepScreenOn()
     }
 

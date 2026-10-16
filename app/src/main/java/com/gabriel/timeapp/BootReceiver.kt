@@ -15,5 +15,6 @@ class BootReceiver : BroadcastReceiver() {
         if (p.running) AlarmScheduler.schedulePomodoro(c, p.endAt)
         // Stopwatch uses elapsedRealtime, which resets on reboot.
         if (Store.stopwatch(c).running) Store.saveStopwatch(c, StopwatchState())
+        Widgets.updateAll(c)
     }
 }

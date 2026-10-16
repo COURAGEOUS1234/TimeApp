@@ -39,6 +39,7 @@ object Pomodoro {
         Store.savePomoState(c, ns)
         AlarmScheduler.schedulePomodoro(c, ns.endAt)
         Notifs.pomodoro(c, ns, cfg)
+        Widgets.updateAll(c)
     }
 
     fun pause(c: Context) {
@@ -48,6 +49,7 @@ object Pomodoro {
         Store.savePomoState(c, ns)
         AlarmScheduler.cancelPomodoro(c)
         Notifs.pomodoro(c, ns, cfg)
+        Widgets.updateAll(c)
     }
 
     fun reset(c: Context) {
@@ -55,6 +57,7 @@ object Pomodoro {
         Store.savePomoState(c, PomoState(doneToday = s.doneToday, focusedToday = s.focusedToday, day = s.day))
         AlarmScheduler.cancelPomodoro(c)
         Notifs.cancel(c, Notifs.ID_POMO)
+        Widgets.updateAll(c)
     }
 
     fun skip(c: Context) { advance(c, completed = false) }
@@ -91,6 +94,7 @@ object Pomodoro {
         Store.savePomoState(c, ns)
         if (auto) AlarmScheduler.schedulePomodoro(c, ns.endAt) else AlarmScheduler.cancelPomodoro(c)
         Notifs.pomodoro(c, ns, cfg)
+        Widgets.updateAll(c)
         return ns
     }
 }

@@ -66,40 +66,64 @@ import java.util.TimeZone
 import kotlin.math.floor
 import kotlin.random.Random
 
-/** Faint tactical grid with very light scanlines, drawn over the content. */
+/** Background texture: tactical grid (Tactical) or light-table rings and crosshair (Tower). */
 fun Modifier.hudGrid(): Modifier = drawWithContent {
     drawContent()
+    if (isTower) {
+        val c = Offset(size.width / 2, size.height * 0.32f)
+        val step = 64.dp.toPx()
+        var r = step
+        while (r < size.height * 1.2f) { drawCircle(GridLine, r, c, style = Stroke(1f)); r += step }
+        val dash = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(4f, 10f))
+        drawLine(GridLine, Offset(0f, c.y), Offset(size.width, c.y), 1f, pathEffect = dash)
+        drawLine(GridLine, Offset(c.x, 0f), Offset(c.x, size.height), 1f, pathEffect = dash)
+        return@drawWithContent
+    }
     val step = 24.dp.toPx()
     var x = 0f
     while (x < size.width) { drawLine(GridLine, Offset(x, 0f), Offset(x, size.height), 1f); x += step }
     var y = 0f
     while (y < size.height) { drawLine(GridLine, Offset(0f, y), Offset(size.width, y), 1f); y += step }
-    var s = 0f
-    while (s < size.height) { drawLine(Color(0x14000000), Offset(0f, s), Offset(size.width, s), 2f); s += 4f }
+    var sl = 0f
+    while (sl < size.height) { drawLine(Color(0x14000000), Offset(0f, sl), Offset(size.width, sl), 2f); sl += 4f }
 }
 
-/** Chamfered panel with a thin outline and corner brackets on the two square corners. */
-fun Modifier.hudPanel(accent: Color = Amber, cut: Dp = 10.dp): Modifier {
+/** Panel: chamfered with corner brackets (Tactical) or thin glass card with tick marks (Tower). */
+fun Modifier.hudPanel(accent: Color? = null, cut: Dp = 10.dp): Modifier {
+    val a = accent ?: Accent
+    if (isTower) {
+        val shape = androidx.compose.foundation.shape.RoundedCornerShape(6.dp)
+        return this.clip(shape).background(Panel).border(1.dp, a.copy(alpha = 0.18f), shape).drawWithContent {
+            drawContent()
+            val t = 10.dp.toPx(); val w = 1.5.dp.toPx(); val c = a.copy(alpha = 0.9f)
+            drawLine(c, Offset(14.dp.toPx(), w / 2), Offset(14.dp.toPx() + t * 2, w / 2), w)
+            for (i in 0..2) drawCircle(c.copy(alpha = 0.6f), 1.5.dp.toPx(), Offset(size.width - (10 + i * 7).dp.toPx(), 8.dp.toPx()))
+        }
+    }
     val shape = CutCornerShape(topStart = cut, bottomEnd = cut)
     return this
         .clip(shape)
         .background(Panel)
-        .border(1.dp, accent.copy(alpha = 0.22f), shape)
+        .border(1.dp, a.copy(alpha = 0.22f), shape)
         .drawWithContent {
             drawContent()
-            val l = 12.dp.toPx(); val w = 2.dp.toPx(); val c = accent.copy(alpha = 0.85f)
-            // top-right
+            val l = 12.dp.toPx(); val w = 2.dp.toPx(); val c = a.copy(alpha = 0.85f)
             drawLine(c, Offset(size.width - l, w / 2), Offset(size.width, w / 2), w)
             drawLine(c, Offset(size.width - w / 2, 0f), Offset(size.width - w / 2, l), w)
-            // bottom-left
             drawLine(c, Offset(0f, size.height - w / 2), Offset(l, size.height - w / 2), w)
             drawLine(c, Offset(w / 2, size.height - l), Offset(w / 2, size.height), w)
         }
 }
 
-/** Amber/black hazard band (military equipment markings). */
+/** Header band: hazard markings (Tactical) or a hairline with node dots (Tower). */
 @Composable
 fun HazardStripe(modifier: Modifier = Modifier) = Canvas(modifier) {
+    if (isTower) {
+        val y = size.height / 2
+        drawLine(Accent.copy(alpha = 0.5f), Offset(0f, y), Offset(size.width, y), 1f)
+        for (i in 1..5) drawCircle(Accent, 2.dp.toPx(), Offset(size.width * i / 6f, y))
+        return@Canvas
+    }
     drawRect(Color(0xFF0B0B08))
     val h = size.height
     val w = h * 0.9f
@@ -126,7 +150,7 @@ fun TimeTape(now: Long, is24: Boolean, modifier: Modifier = Modifier) {
         val ppm = (size.width / span).toFloat()
         val cx = size.width / 2
         val base = size.height - 6.dp.toPx()
-        drawLine(Amber.copy(alpha = 0.35f), Offset(0f, base), Offset(size.width, base), 1f)
+        drawLine(Accent.copy(alpha = 0.35f), Offset(0f, base), Offset(size.width, base), 1f)
         val first = floor(nowMin - span / 2).toLong()
         for (m in first..(first + span.toLong() + 1)) {
             if (m % 5L != 0L) continue
@@ -150,38 +174,51 @@ fun TimeTape(now: Long, is24: Boolean, modifier: Modifier = Modifier) {
             Offset(size.width - fade, 0f), Size(fade, size.height),
         )
         // caret
-        val caret = Path().apply {
-            moveTo(cx, base - 2.dp.toPx()); lineTo(cx - 6.dp.toPx(), size.height); lineTo(cx + 6.dp.toPx(), size.height); close()
+        if (isTower) {
+            drawCircle(Accent, 4.dp.toPx(), Offset(cx, base), style = Stroke(1.5.dp.toPx()))
+            drawLine(Accent.copy(alpha = 0.7f), Offset(cx, 0f), Offset(cx, base - 4.dp.toPx()), 1f)
+        } else {
+            val caret = Path().apply {
+                moveTo(cx, base - 2.dp.toPx()); lineTo(cx - 6.dp.toPx(), size.height); lineTo(cx + 6.dp.toPx(), size.height); close()
+            }
+            drawPath(caret, Accent)
+            drawLine(Accent, Offset(cx, 0f), Offset(cx, base), 2f)
         }
-        drawPath(caret, Amber)
-        drawLine(Amber, Offset(cx, 0f), Offset(cx, base), 2f)
     }
 }
 
-/** Hash-shaped (#) targeting reticle that frames its content and slowly breathes. */
+/** Target frame: hash (#) reticle (Tactical) or circular sight with ticks (Tower). Breathes slowly. */
 @Composable
-fun Reticle(modifier: Modifier = Modifier, color: Color = Amber, content: @Composable () -> Unit) {
+fun Reticle(modifier: Modifier = Modifier, color: Color? = null, content: @Composable () -> Unit) {
+    val col = color ?: Accent
     val pulse by rememberInfiniteTransition(label = "reticle").animateFloat(
         0.35f, 0.75f, infiniteRepeatable(tween(1800, easing = LinearEasing), RepeatMode.Reverse), label = "a",
     )
     Box(modifier, contentAlignment = Alignment.Center) {
         Canvas(Modifier.matchParentSize()) {
-            val c = color.copy(alpha = pulse)
+            val c = col.copy(alpha = pulse)
+            val sw = 1.5.dp.toPx()
+            if (isTower) {
+                val r = size.height * 0.62f
+                val ctr = Offset(size.width / 2, size.height / 2)
+                drawArc(c, 200f, 140f, false, Offset(ctr.x - r, ctr.y - r), Size(r * 2, r * 2), style = Stroke(sw))
+                drawArc(c, 20f, 140f, false, Offset(ctr.x - r, ctr.y - r), Size(r * 2, r * 2), style = Stroke(sw))
+                val t = 8.dp.toPx()
+                drawLine(c, Offset(ctr.x - r - t, ctr.y), Offset(ctr.x - r + t, ctr.y), sw)
+                drawLine(c, Offset(ctr.x + r - t, ctr.y), Offset(ctr.x + r + t, ctr.y), sw)
+                return@Canvas
+            }
             val x1 = size.width * 0.06f; val x2 = size.width * 0.94f
             val y1 = size.height * 0.12f; val y2 = size.height * 0.88f
-            val sw = 1.5.dp.toPx()
             val gapX = size.width * 0.28f; val gapY = size.height * 0.30f
-            // verticals, broken in the middle
             for (x in listOf(x1, x2)) {
                 drawLine(c, Offset(x, 0f), Offset(x, gapY), sw)
                 drawLine(c, Offset(x, size.height - gapY), Offset(x, size.height), sw)
             }
-            // horizontals, broken in the middle
             for (y in listOf(y1, y2)) {
                 drawLine(c, Offset(0f, y), Offset(gapX, y), sw)
                 drawLine(c, Offset(size.width - gapX, y), Offset(size.width, y), sw)
             }
-            // range ticks
             val t = 4.dp.toPx()
             for (i in 1..3) {
                 val yy = y1 + (y2 - y1) * i / 4f
@@ -219,7 +256,15 @@ fun rememberFrameClock(active: Boolean): Long {
 
 /** HUD text with occasional signal interference: brief jitter and a cyan split. */
 @Composable
-fun GlitchText(text: String, fontSize: TextUnit, enabled: Boolean, modifier: Modifier = Modifier, color: Color = Amber) {
+fun GlitchText(text: String, fontSize: TextUnit, enabled: Boolean, modifier: Modifier = Modifier, color: Color? = null) {
+    if (isTower) {
+        Text(
+            text, modifier, color = Bone, fontSize = fontSize * 1.1f, fontFamily = Digits, maxLines = 1,
+            style = TextStyle(shadow = Shadow(Accent.copy(alpha = 0.6f), blurRadius = 24f)),
+        )
+        return
+    }
+    val tint = color ?: Accent
     var dx by remember { mutableFloatStateOf(0f) }
     var flicker by remember { mutableFloatStateOf(1f) }
     var ghost by remember { mutableFloatStateOf(0f) }
@@ -239,34 +284,39 @@ fun GlitchText(text: String, fontSize: TextUnit, enabled: Boolean, modifier: Mod
     Box(modifier, contentAlignment = Alignment.Center) {
         Text(
             text, Modifier.graphicsLayer { translationX = -dx * 1.5f; alpha = ghost },
-            color = Cyan, fontSize = fontSize, fontFamily = Stencil, maxLines = 1,
+            color = Second, fontSize = fontSize, fontFamily = Digits, maxLines = 1,
         )
         Text(
             text, Modifier.graphicsLayer { translationX = dx; alpha = flicker },
-            color = color, fontSize = fontSize, fontFamily = Stencil, maxLines = 1,
-            style = TextStyle(shadow = Shadow(color.copy(alpha = 0.7f), blurRadius = 22f)),
+            color = tint, fontSize = fontSize, fontFamily = Digits, maxLines = 1,
+            style = TextStyle(shadow = Shadow(tint.copy(alpha = 0.7f), blurRadius = 22f)),
         )
     }
 }
 
 @Composable
-fun SectionLabel(text: String, modifier: Modifier = Modifier, color: Color = Amber) =
-    Text("▸ " + text.uppercase(), modifier, color = color, fontFamily = Mono, fontSize = 12.sp, letterSpacing = 2.sp)
+fun SectionLabel(text: String, modifier: Modifier = Modifier, color: Color? = null) =
+    Text(
+        (if (isTower) "— " else "▸ ") + text.uppercase(), modifier, color = color ?: Accent,
+        fontFamily = if (isTower) UiFont else Mono, fontSize = 12.sp, letterSpacing = if (isTower) 3.sp else 2.sp,
+    )
 
-private val ButtonShape = CutCornerShape(topStart = 12.dp, bottomEnd = 12.dp)
+private val buttonShape: androidx.compose.ui.graphics.Shape
+    get() = if (isTower) androidx.compose.foundation.shape.RoundedCornerShape(28.dp)
+    else CutCornerShape(topStart = 12.dp, bottomEnd = 12.dp)
 
 @Composable
 fun ActionButton(text: String, primary: Boolean, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) =
     Button(
         onClick = onClick, modifier = modifier.height(54.dp), enabled = enabled,
-        shape = ButtonShape,
-        border = if (primary) null else BorderStroke(1.dp, if (enabled) Amber.copy(alpha = 0.7f) else Ash),
+        shape = buttonShape,
+        border = if (primary && !isTower) null else BorderStroke(1.dp, if (enabled) Accent.copy(alpha = if (primary) 1f else 0.6f) else Ash),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (primary) Amber else Color.Transparent,
-            contentColor = if (primary) Bg else Amber,
+            containerColor = if (primary && !isTower) Accent else if (primary) Accent.copy(alpha = 0.18f) else Color.Transparent,
+            contentColor = if (primary && !isTower) Bg else Accent,
             disabledContainerColor = Panel2, disabledContentColor = Ash,
         ),
-    ) { Text(text.uppercase(), fontFamily = Hud, fontSize = 17.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp) }
+    ) { Text(text.uppercase(), fontFamily = UiFont, fontSize = 17.sp, fontWeight = if (isTower) FontWeight.SemiBold else FontWeight.Bold, letterSpacing = 2.sp) }
 
 @Composable
 fun ButtonRow(content: @Composable RowScope.() -> Unit) =
@@ -279,17 +329,17 @@ fun ButtonRow(content: @Composable RowScope.() -> Unit) =
 @Composable
 fun Choice(text: String, selected: Boolean, onClick: () -> Unit) = FilterChip(
     selected = selected, onClick = onClick,
-    label = { Text(text.uppercase(), fontFamily = Hud, fontWeight = FontWeight.SemiBold, letterSpacing = 1.sp) },
-    shape = CutCornerShape(topStart = 8.dp, bottomEnd = 8.dp),
+    label = { Text(text.uppercase(), fontFamily = UiFont, fontWeight = FontWeight.SemiBold, letterSpacing = 1.sp) },
+    shape = if (isTower) androidx.compose.foundation.shape.RoundedCornerShape(16.dp) else CutCornerShape(topStart = 8.dp, bottomEnd = 8.dp),
     colors = FilterChipDefaults.filterChipColors(
         containerColor = Panel, labelColor = Bone,
-        selectedContainerColor = Amber, selectedLabelColor = Bg,
+        selectedContainerColor = Accent, selectedLabelColor = Bg,
     ),
 )
 
 @Composable
 fun appSwitchColors() = SwitchDefaults.colors(
-    checkedThumbColor = Bg, checkedTrackColor = Amber,
+    checkedThumbColor = Bg, checkedTrackColor = Accent,
     uncheckedThumbColor = Ash, uncheckedTrackColor = Panel2, uncheckedBorderColor = Ash,
 )
 
@@ -308,31 +358,51 @@ fun ToggleRow(label: String, checked: Boolean, sub: String? = null, onChange: (B
 fun StepperRow(label: String, value: Int, unit: String, range: IntRange, onChange: (Int) -> Unit) =
     Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(label, color = Bone, fontSize = 17.sp, modifier = Modifier.weight(1f))
-        TextButton(onClick = { if (value > range.first) onChange(value - 1) }) { Text("−", color = Amber, fontSize = 22.sp) }
-        Text("$value $unit".trim(), color = Bone, fontFamily = Stencil, fontSize = 18.sp)
-        TextButton(onClick = { if (value < range.last) onChange(value + 1) }) { Text("+", color = Amber, fontSize = 22.sp) }
+        TextButton(onClick = { if (value > range.first) onChange(value - 1) }) { Text("−", color = Accent, fontSize = 22.sp) }
+        Text("$value $unit".trim(), color = Bone, fontFamily = Digits, fontSize = 18.sp)
+        TextButton(onClick = { if (value < range.last) onChange(value + 1) }) { Text("+", color = Accent, fontSize = 22.sp) }
     }
 
-/** Segmented HUD gauge: 60 segments, [progress] 0..1 of them lit. */
+/** Gauge: 60 lit segments (Tactical) or a hairline arc with a dial of ticks (Tower). */
 @Composable
 fun Ring(progress: Float, color: Color, size: Dp, modifier: Modifier = Modifier, content: @Composable () -> Unit) =
     Box(modifier.size(size), contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
+            val p = progress.coerceIn(0f, 1f)
+            val cx = this.size.width / 2
+            val cy = this.size.height / 2
+            if (isTower) {
+                val r = this.size.minDimension / 2
+                for (i in 0 until 60) {
+                    val a = Math.toRadians(i * 6.0 - 90)
+                    val len = if (i % 5 == 0) 10.dp.toPx() else 4.dp.toPx()
+                    val cos = kotlin.math.cos(a).toFloat(); val sin = kotlin.math.sin(a).toFloat()
+                    drawLine(
+                        if (i / 60f < p) color.copy(alpha = 0.9f) else Panel2,
+                        Offset(cx + (r - len) * cos, cy + (r - len) * sin), Offset(cx + r * cos, cy + r * sin), 1.5f,
+                    )
+                }
+                val inset = 22.dp.toPx()
+                val arcSize = Size(this.size.width - inset * 2, this.size.height - inset * 2)
+                drawArc(Panel2, 0f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(2.dp.toPx()))
+                drawArc(
+                    color, -90f, 360f * p, false, Offset(inset, inset), arcSize,
+                    style = Stroke(3.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round),
+                )
+                return@Canvas
+            }
             val sw = 12.dp.toPx()
             val inset = sw / 2 + 6.dp.toPx()
             val arcSize = Size(this.size.width - inset * 2, this.size.height - inset * 2)
             val segs = 60
-            val lit = (progress.coerceIn(0f, 1f) * segs).let { kotlin.math.ceil(it).toInt() }
+            val lit = kotlin.math.ceil(p * segs).toInt()
             for (i in 0 until segs) {
-                val start = -90f + i * 6f + 0.8f
                 drawArc(
-                    if (i < lit) color else Panel2, start, 4.4f, false,
+                    if (i < lit) color else Panel2, -90f + i * 6f + 0.8f, 4.4f, false,
                     Offset(inset, inset), arcSize, style = Stroke(width = sw),
                 )
             }
-            // outer hairline + top marker
             drawCircle(color.copy(alpha = 0.25f), radius = this.size.minDimension / 2 - 1.dp.toPx(), style = Stroke(1.dp.toPx()))
-            val cx = this.size.width / 2
             drawLine(color, Offset(cx, 0f), Offset(cx, 8.dp.toPx()), 2.dp.toPx())
         }
         content()

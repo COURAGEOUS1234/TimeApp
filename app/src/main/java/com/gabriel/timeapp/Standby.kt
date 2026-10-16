@@ -22,8 +22,8 @@ import kotlin.random.Random
 /** Dim, burn-in-safe clock: moves to a new spot every minute. Used by standby mode and the screen saver. */
 class StandbyClockView(c: Context, a: AttributeSet? = null) : View(c, a) {
     private val timeP = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        typeface = c.resources.getFont(R.font.black_ops_one)
-        color = 0xFFB07A20.toInt(); textAlign = Paint.Align.CENTER
+        typeface = Look.digits(c)
+        color = Look.standbyTime(c); textAlign = Paint.Align.CENTER
     }
     private val subP = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         typeface = c.resources.getFont(R.font.share_tech_mono)

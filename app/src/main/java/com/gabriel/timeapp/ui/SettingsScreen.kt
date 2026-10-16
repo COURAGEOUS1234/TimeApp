@@ -53,6 +53,23 @@ fun SettingsScreen(onStandby: () -> Unit, onDismiss: () -> Unit) {
                     SectionLabel("Settings")
                 }
                 Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 20.dp)) {
+                    SectionLabel("Theme")
+                    Spacer(Modifier.height(8.dp))
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Choice("Tactical", s.theme == "tactical") {
+                            set(s.copy(theme = "tactical")); ThemeState.palette = Themes.tactical
+                        }
+                        Choice("Tower", s.theme == "tower") {
+                            set(s.copy(theme = "tower")); ThemeState.palette = Themes.tower
+                        }
+                    }
+                    Text(
+                        if (s.theme == "tower") "Clean sky-station HUD: ice-blue hairlines, thin type, circular gauges."
+                        else "Military field HUD: amber on gunmetal, stencil digits, chamfered panels.",
+                        color = Ash, fontSize = 13.sp,
+                    )
+                    Text("Home-screen widgets follow the theme.", color = Ash, fontSize = 13.sp)
+                    Spacer(Modifier.height(20.dp))
                     SectionLabel("Display")
                     Spacer(Modifier.height(8.dp))
                     Text("Time format", color = Bone, fontSize = 16.sp)
@@ -81,10 +98,10 @@ fun SettingsScreen(onStandby: () -> Unit, onDismiss: () -> Unit) {
                         color = Ash, fontSize = 13.sp,
                     )
                     ToggleRow("Dim screen", s.standbyDim, "Lowest brightness in standby and screen saver") { set(s.copy(standbyDim = it)) }
-                    TextButton(onClick = onStandby) { Text("Start standby mode", color = Amber, fontSize = 16.sp) }
+                    TextButton(onClick = onStandby) { Text("Start standby mode", color = Accent, fontSize = 16.sp) }
                     Text("Keeps the screen on with a dim clock. Double-tap to exit. Best used while charging.", color = Ash, fontSize = 12.sp)
                     TextButton(onClick = { open(Intent(AndroidSettings.ACTION_DREAM_SETTINGS)) }) {
-                        Text("Set up screen saver while charging", color = Amber, fontSize = 16.sp)
+                        Text("Set up screen saver while charging", color = Accent, fontSize = 16.sp)
                     }
                     Text("Choose Terminal Hour as the screen saver. It then appears automatically while the phone charges.", color = Ash, fontSize = 12.sp)
 
@@ -92,7 +109,7 @@ fun SettingsScreen(onStandby: () -> Unit, onDismiss: () -> Unit) {
                     SectionLabel("System")
                     TextButton(onClick = {
                         open(Intent(AndroidSettings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(AndroidSettings.EXTRA_APP_PACKAGE, ctx.packageName))
-                    }) { Text("Notification settings", color = Amber, fontSize = 16.sp) }
+                    }) { Text("Notification settings", color = Accent, fontSize = 16.sp) }
 
                     Spacer(Modifier.height(20.dp))
                     SectionLabel("About")

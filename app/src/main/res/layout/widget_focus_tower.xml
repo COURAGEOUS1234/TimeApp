@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/w_root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:gravity="center"
+    android:padding="12dp" android:background="@drawable/widget_bg_tower">
+    <TextView android:id="@+id/w_phase" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="— FOCUS" android:textColor="#9FDFFF" android:textSize="12sp"
+        android:fontFamily="@font/jura_semibold" android:letterSpacing="0.25" />
+    <Chronometer android:id="@+id/w_chrono" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textSize="40sp" android:textColor="#F2F7FA" android:fontFamily="@font/jura_light" android:includeFontPadding="false" />
+    <TextView android:id="@+id/w_round" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="ROUND 1 / 4" android:textColor="#7D8B97" android:textSize="11sp"
+        android:fontFamily="@font/jura_semibold" android:letterSpacing="0.1" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:orientation="horizontal">
+        <TextView android:id="@+id/w_toggle" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1.4"
+            android:gravity="center" android:text="START" android:textColor="#9FDFFF" android:textSize="13sp"
+            android:fontFamily="@font/jura_semibold" android:letterSpacing="0.15" android:background="@drawable/widget_btn_tower" />
+        <Space android:layout_width="8dp" android:layout_height="1dp" />
+        <TextView android:id="@+id/w_skip" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+            android:gravity="center" android:text="SKIP" android:textColor="#7D8B97" android:textSize="13sp"
+            android:fontFamily="@font/jura_semibold" android:letterSpacing="0.15" android:background="@drawable/widget_btn_tower" />
+    </LinearLayout>
+</LinearLayout>

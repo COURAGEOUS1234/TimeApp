@@ -46,7 +46,7 @@ object Notifs {
         ensure(c)
         return Notification.Builder(c, channel)
             .setSmallIcon(R.drawable.ic_stat_clock)
-            .setColor(0xFFFFB23E.toInt())
+            .setColor(Look.accent(c))
             .setContentIntent(openApp(c, tab))
             .setOnlyAlertOnce(true)
     }

@@ -95,7 +95,7 @@ fun AlarmScreen(tick: Int, addPending: Boolean, consumeAdd: () -> Unit) {
                 if (next == null) {
                     SectionLabel("Next alarm", color = Ash)
                     Spacer(Modifier.height(8.dp))
-                    Text("ALL ALARMS OFF", color = Ash, fontFamily = Stencil, fontSize = 26.sp)
+                    Text("ALL ALARMS OFF", color = Ash, fontFamily = Digits, fontSize = 26.sp)
                 } else {
                     SectionLabel("Next alarm")
                     Spacer(Modifier.height(4.dp))
@@ -145,7 +145,7 @@ fun AlarmScreen(tick: Int, addPending: Boolean, consumeAdd: () -> Unit) {
                 TextButton(onClick = {
                     AlarmScheduler.cancel(ctx, d.id); Store.deleteAlarm(ctx, d.id)
                     alarms = Store.alarms(ctx); deleting = null
-                }) { Text("Delete", color = Amber) }
+                }) { Text("Delete", color = Accent) }
             },
             dismissButton = { TextButton(onClick = { deleting = null }) { Text("Cancel", color = Bone) } },
             containerColor = Panel,
@@ -165,7 +165,7 @@ private fun AlarmCard(a: Alarm, is24: Boolean, now: Long, onClick: () -> Unit, o
         Column(Modifier.weight(1f)) {
             if (a.label.isNotBlank()) Text(a.label, color = Ash, fontSize = 13.sp, maxLines = 1)
             Row(verticalAlignment = Alignment.Bottom) {
-                Text(Fmt.hm(a.hour, a.minute, is24), color = if (on) Bone else Ash, fontFamily = Stencil, fontSize = 40.sp)
+                Text(Fmt.hm(a.hour, a.minute, is24), color = if (on) Bone else Ash, fontFamily = Digits, fontSize = 40.sp)
                 if (!is24) Text(
                     " " + Fmt.ampmOf(a.hour), color = if (on) Bone else Ash, fontSize = 16.sp,
                     modifier = Modifier.padding(bottom = 7.dp),
@@ -173,7 +173,7 @@ private fun AlarmCard(a: Alarm, is24: Boolean, now: Long, onClick: () -> Unit, o
             }
         }
         Text(
-            Fmt.days(a, now), color = if (on) Amber else Ash, fontSize = 13.sp,
+            Fmt.days(a, now), color = if (on) Accent else Ash, fontSize = 13.sp,
             modifier = Modifier.padding(end = 12.dp),
         )
         Switch(checked = on, onCheckedChange = onToggle, colors = appSwitchColors())
@@ -206,12 +206,12 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
                             clockDialColor = Panel,
                             clockDialSelectedContentColor = Bg,
                             clockDialUnselectedContentColor = Bone,
-                            selectorColor = Amber,
-                            periodSelectorBorderColor = Amber,
-                            periodSelectorSelectedContainerColor = Amber,
+                            selectorColor = Accent,
+                            periodSelectorBorderColor = Accent,
+                            periodSelectorSelectedContainerColor = Accent,
                             periodSelectorSelectedContentColor = Bg,
                             periodSelectorUnselectedContentColor = Ash,
-                            timeSelectorSelectedContainerColor = Amber,
+                            timeSelectorSelectedContainerColor = Accent,
                             timeSelectorSelectedContentColor = Bg,
                             timeSelectorUnselectedContainerColor = Panel,
                             timeSelectorUnselectedContentColor = Bone,
@@ -224,7 +224,7 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
                         listOf("M", "T", "W", "T", "F", "S", "S").forEachIndexed { i, d ->
                             val sel = (days and (1 shl i)) != 0
                             Box(
-                                Modifier.size(40.dp).clip(androidx.compose.foundation.shape.CutCornerShape(8.dp)).background(if (sel) Amber else Panel)
+                                Modifier.size(40.dp).clip(androidx.compose.foundation.shape.CutCornerShape(8.dp)).background(if (sel) Accent else Panel)
                                     .clickable { days = days xor (1 shl i) },
                                 contentAlignment = Alignment.Center,
                             ) { Text(d, color = if (sel) Bg else Bone, fontSize = 15.sp) }
@@ -241,8 +241,8 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
                         label = { Text("Alarm name") }, singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Amber, unfocusedBorderColor = Panel2,
-                            focusedLabelColor = Amber, unfocusedLabelColor = Ash, cursorColor = Amber,
+                            focusedBorderColor = Accent, unfocusedBorderColor = Panel2,
+                            focusedLabelColor = Accent, unfocusedLabelColor = Ash, cursorColor = Accent,
                             focusedTextColor = Bone, unfocusedTextColor = Bone,
                         ),
                     )
@@ -263,7 +263,7 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
                     }
                 }
                 Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    if (onDelete != null) TextButton(onClick = onDelete) { Text("Delete", color = Amber, fontSize = 16.sp) }
+                    if (onDelete != null) TextButton(onClick = onDelete) { Text("Delete", color = Accent, fontSize = 16.sp) }
                     Spacer(Modifier.weight(1f))
                     TextButton(onClick = onDismiss) { Text("Cancel", color = Bone, fontSize = 16.sp) }
                     Spacer(Modifier.size(8.dp))

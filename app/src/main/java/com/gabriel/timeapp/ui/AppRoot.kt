@@ -105,14 +105,14 @@ private fun TopBar(now: Long, showAdd: Boolean, onAdd: () -> Unit, onStandby: ()
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {
-            Text("TERMINAL HOUR", color = Amber, fontFamily = Hud, fontWeight = FontWeight.Bold, fontSize = 16.sp, letterSpacing = 3.sp)
+            Text("TERMINAL HOUR", color = Accent, fontFamily = UiFont, fontWeight = FontWeight.Bold, fontSize = 16.sp, letterSpacing = 3.sp)
             Text(
                 "SYS ONLINE · ${if (battery in 0..100) "PWR $battery%" else "PWR --"} · $gmt",
                 color = Ash, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp,
             )
         }
         Spacer(Modifier.weight(1f))
-        if (showAdd) IconButton(onClick = onAdd) { Icon(Icons.Filled.Add, "Add", tint = Amber) }
+        if (showAdd) IconButton(onClick = onAdd) { Icon(Icons.Filled.Add, "Add", tint = Accent) }
         Box {
             IconButton(onClick = { menu = true }) { Icon(Icons.Filled.MoreVert, "More options", tint = Bone) }
             DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
@@ -126,7 +126,7 @@ private fun TopBar(now: Long, showAdd: Boolean, onAdd: () -> Unit, onStandby: ()
 @Composable
 private fun BottomTabs(selected: Int, onSelect: (Int) -> Unit) {
     Column(Modifier.fillMaxWidth().background(Bg)) {
-        HorizontalDivider(color = Amber.copy(alpha = 0.25f))
+        HorizontalDivider(color = Accent.copy(alpha = 0.25f))
         Row(Modifier.fillMaxWidth().padding(bottom = 4.dp)) {
             TABS.forEachIndexed { i, name ->
                 val sel = i == selected
@@ -134,10 +134,10 @@ private fun BottomTabs(selected: Int, onSelect: (Int) -> Unit) {
                     Modifier.weight(1f).clickable { onSelect(i) },
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Box(Modifier.width(28.dp).height(3.dp).background(if (sel) Amber else Color.Transparent))
+                    Box(Modifier.width(28.dp).height(3.dp).background(if (sel) Accent else Color.Transparent))
                     Spacer(Modifier.height(10.dp))
                     Text(
-                        name.uppercase(), color = if (sel) Amber else Ash, fontFamily = Hud, fontSize = 12.sp,
+                        name.uppercase(), color = if (sel) Accent else Ash, fontFamily = UiFont, fontSize = 12.sp,
                         fontWeight = if (sel) FontWeight.Bold else FontWeight.SemiBold, letterSpacing = 1.sp,
                         maxLines = 1, softWrap = false, overflow = TextOverflow.Clip,
                     )

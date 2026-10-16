@@ -34,7 +34,7 @@ class AlarmActivity : Activity() {
     private val flash = object : Runnable {
         override fun run() {
             flashOn = !flashOn
-            root.setBackgroundColor(if (flashOn) 0xFF2E1E00.toInt() else 0xFF0A0D0B.toInt())
+            root.setBackgroundColor(if (flashOn) Look.flash(this@AlarmActivity) else Look.bg(this@AlarmActivity))
             title.alpha = if (flashOn) 1f else 0.4f
             handler.postDelayed(this, 400)
         }
@@ -56,6 +56,7 @@ class AlarmActivity : Activity() {
         root = findViewById(R.id.alarmRoot)
         title = findViewById(R.id.alertTitle)
 
+        applyTheme()
         val kind = intent.getStringExtra(EXTRA_KIND) ?: KIND_ALARM
         alarm = if (kind == KIND_ALARM) Store.alarm(this, intent.getIntExtra(EXTRA_ID, -1)) else null
 
@@ -87,6 +88,25 @@ class AlarmActivity : Activity() {
             if (a != null) AlarmScheduler.snooze(this, a.id, a.snoozeMin)
             finishAlert()
         }, AUTO_STOP_MS)
+    }
+
+    private fun applyTheme() {
+        val accent = Look.accent(this)
+        val tower = Look.tower(this)
+        root.setBackgroundColor(Look.bg(this))
+        findViewById<TextView>(R.id.alertTitle).apply {
+            setTextColor(accent); typeface = Look.digits(this@AlarmActivity); setShadowLayer(30f, 0f, 0f, accent)
+        }
+        findViewById<TextView>(R.id.alertLabel).apply { setTextColor(accent); typeface = Look.ui(this@AlarmActivity) }
+        findViewById<TextView>(R.id.alertClock).apply { setTextColor(Look.text(this@AlarmActivity)); typeface = Look.digits(this@AlarmActivity) }
+        findViewById<Button>(R.id.dismiss).apply {
+            setBackgroundColor(accent); setTextColor(Look.bg(this@AlarmActivity)); typeface = Look.ui(this@AlarmActivity)
+        }
+        findViewById<Button>(R.id.snooze).apply { setTextColor(accent); typeface = Look.ui(this@AlarmActivity) }
+        val decor = if (tower) View.GONE else View.VISIBLE
+        findViewById<View>(R.id.hazardTop).visibility = decor
+        findViewById<View>(R.id.hazardBottom).visibility = decor
+        findViewById<View>(R.id.scan).visibility = decor
     }
 
     private fun finishAlert() {

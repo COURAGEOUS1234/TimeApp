@@ -73,9 +73,9 @@ fun TimerScreen(tick: Int) {
             Spacer(Modifier.height(32.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Wheel("Hours", h, 99) { h = it }
-                Text(":", color = Ash, fontFamily = Stencil, fontSize = 44.sp)
+                Text(":", color = Ash, fontFamily = Digits, fontSize = 44.sp)
                 Wheel("Minutes", m, 59) { m = it }
-                Text(":", color = Ash, fontFamily = Stencil, fontSize = 44.sp)
+                Text(":", color = Ash, fontFamily = Digits, fontSize = 44.sp)
                 Wheel("Seconds", sec, 59) { sec = it }
             }
             Spacer(Modifier.height(24.dp))
@@ -88,7 +88,7 @@ fun TimerScreen(tick: Int) {
             ) {
                 presets.forEach { p ->
                     Text(
-                        Fmt.hms(p), color = Bone, fontFamily = Stencil, fontSize = 18.sp,
+                        Fmt.hms(p), color = Bone, fontFamily = Digits, fontSize = 18.sp,
                         modifier = Modifier.hudPanel(cut = 6.dp)
                             .combinedClickable(
                                 onClick = {
@@ -102,7 +102,7 @@ fun TimerScreen(tick: Int) {
                 }
                 if (totalSet > 0 && totalSet !in presets) {
                     Text(
-                        "+ Save current", color = Amber, fontSize = 15.sp,
+                        "+ Save current", color = Accent, fontSize = 15.sp,
                         modifier = Modifier.hudPanel(cut = 6.dp)
                             .combinedClickable(onClick = {
                                 presets = (presets + totalSet).sorted(); Store.saveTimerPresets(ctx, presets)
@@ -129,9 +129,9 @@ fun TimerScreen(tick: Int) {
     } else {
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.weight(1f))
-            Ring(remaining.toFloat() / max(1L, t.total), Amber, 280.dp) {
+            Ring(remaining.toFloat() / max(1L, t.total), Accent, 280.dp) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(Fmt.countdown(remaining), color = Bone, fontFamily = Stencil, fontSize = 48.sp)
+                    Text(Fmt.countdown(remaining), color = Bone, fontFamily = Digits, fontSize = 48.sp)
                     val endAt = if (t.running) t.endAt else System.currentTimeMillis() + t.remaining
                     Text(
                         if (t.running) "Ends at " + Fmt.clock(endAt, is24) + (if (is24) "" else " " + Fmt.ampm(endAt)) else "Paused",
@@ -162,7 +162,7 @@ private fun Wheel(label: String, value: Int, maxValue: Int, onChange: (Int) -> U
         IconButton(onClick = { onChange(if (value >= maxValue) 0 else value + 1) }) {
             Icon(Icons.Filled.KeyboardArrowUp, "Increase $label", tint = Ash)
         }
-        Text("%02d".format(value), color = Bone, fontFamily = Stencil, fontSize = 52.sp)
+        Text("%02d".format(value), color = Bone, fontFamily = Digits, fontSize = 52.sp)
         IconButton(onClick = { onChange(if (value <= 0) maxValue else value - 1) }) {
             Icon(Icons.Filled.KeyboardArrowDown, "Decrease $label", tint = Ash)
         }

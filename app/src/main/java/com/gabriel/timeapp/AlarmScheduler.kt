@@ -48,11 +48,13 @@ object AlarmScheduler {
     fun schedule(c: Context, a: Alarm) {
         if (!a.enabled) { cancel(c, a.id); return }
         alarmClock(c, nextTrigger(a), pi(c, ACTION_ALARM, a.id, a.id))
+        Widgets.updateAll(c)
     }
 
     fun cancel(c: Context, id: Int) {
         am(c).cancel(pi(c, ACTION_ALARM, id, id))
         am(c).cancel(pi(c, ACTION_SNOOZE, SNOOZE_BASE + id, id))
+        Widgets.updateAll(c)
     }
 
     fun snooze(c: Context, id: Int, minutes: Int) =

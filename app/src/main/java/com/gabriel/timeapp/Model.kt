@@ -45,6 +45,7 @@ data class Settings(
     val keepScreenOn: Boolean = false,
     val defaultSnooze: Int = 5,
     val standbyDim: Boolean = true,
+    val theme: String = "tactical", // tactical | tower
 )
 
 data class StopwatchState(

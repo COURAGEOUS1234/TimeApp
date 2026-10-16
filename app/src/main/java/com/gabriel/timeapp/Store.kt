@@ -46,8 +46,10 @@ object Store {
         p(c).getString("cities", null)?.split(",")?.filter { it.isNotBlank() }
             ?: listOf("Asia/Tokyo", "Europe/London")
 
-    fun saveCities(c: Context, l: List<String>) =
+    fun saveCities(c: Context, l: List<String>) {
         p(c).edit().putString("cities", l.joinToString(",")).apply()
+        Widgets.updateAll(c)
+    }
 
     // ---- settings
     fun settings(c: Context) = p(c).run {
@@ -57,13 +59,15 @@ object Store {
             keepScreenOn = getBoolean("s_keep", false),
             defaultSnooze = getInt("s_snooze", 5),
             standbyDim = getBoolean("s_dim", true),
+            theme = getString("s_theme", "tactical") ?: "tactical",
         )
     }
 
     fun saveSettings(c: Context, s: Settings) = p(c).edit()
         .putString("s_fmt", s.timeFormat).putBoolean("s_glitch", s.glitch)
         .putBoolean("s_keep", s.keepScreenOn).putInt("s_snooze", s.defaultSnooze)
-        .putBoolean("s_dim", s.standbyDim).apply()
+        .putBoolean("s_dim", s.standbyDim).putString("s_theme", s.theme).apply()
+        .also { Widgets.updateAll(c) }
 
     fun lastTab(c: Context) = p(c).getInt("tab", 1)
     fun setLastTab(c: Context, t: Int) = p(c).edit().putInt("tab", t).apply()

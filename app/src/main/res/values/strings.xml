@@ -1,1 +1,9 @@
-<resources><string name="app_name">Terminal Hour</string></resources>
+<resources>
+    <string name="app_name">Terminal Hour</string>
+    <string name="w_clock">HUD Clock</string>
+    <string name="w_world">HUD World Clock</string>
+    <string name="w_focus">HUD Focus</string>
+    <string name="w_clock_desc">Time, date and next alarm in your HUD theme</string>
+    <string name="w_world_desc">Local time plus your first three cities</string>
+    <string name="w_focus_desc">Pomodoro countdown with start, pause and skip</string>
+</resources>

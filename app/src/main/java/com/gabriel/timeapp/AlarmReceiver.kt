@@ -44,7 +44,7 @@ object Alerts {
         val title = if (kind == AlarmActivity.KIND_TIMER) "Time's up" else (label ?: "Alarm")
         val n = Notification.Builder(c, Notifs.CH_ALARM)
             .setSmallIcon(R.drawable.ic_stat_clock)
-            .setColor(0xFFFFB23E.toInt())
+            .setColor(Look.accent(c))
             .setContentTitle(title)
             .setContentText("Tap to open")
             .setCategory(Notification.CATEGORY_ALARM)

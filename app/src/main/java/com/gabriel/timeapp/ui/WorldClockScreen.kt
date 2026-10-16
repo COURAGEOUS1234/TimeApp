@@ -147,17 +147,17 @@ private fun CityRow(
         ) {
             Column(Modifier.weight(1f)) {
                 Text(Zones.city(z).uppercase(), color = Bone, fontSize = 19.sp, letterSpacing = 1.sp, maxLines = 1)
-                Text("$day · ${Fmt.offset(off)}".uppercase(), color = Cyan, fontFamily = Mono, fontSize = 11.sp, letterSpacing = 1.sp)
+                Text("$day · ${Fmt.offset(off)}".uppercase(), color = Second, fontFamily = Mono, fontSize = 11.sp, letterSpacing = 1.sp)
             }
             Row(verticalAlignment = Alignment.Bottom) {
-                Text(Fmt.clock(now, is24, tz), color = Bone, fontFamily = Stencil, fontSize = 32.sp)
+                Text(Fmt.clock(now, is24, tz), color = Bone, fontFamily = Digits, fontSize = 32.sp)
                 if (!is24) Text(" " + Fmt.ampm(now, tz), color = Ash, fontSize = 14.sp, modifier = Modifier.padding(bottom = 5.dp))
             }
         }
         DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
             if (canUp) DropdownMenuItem(text = { Text("Move up") }, onClick = { menu = false; onUp() })
             if (canDown) DropdownMenuItem(text = { Text("Move down") }, onClick = { menu = false; onDown() })
-            DropdownMenuItem(text = { Text("Remove", color = Amber) }, onClick = { menu = false; onRemove() })
+            DropdownMenuItem(text = { Text("Remove", color = Accent) }, onClick = { menu = false; onRemove() })
         }
     }
 }
@@ -183,7 +183,7 @@ private fun CityPicker(existing: List<String>, onDismiss: () -> Unit, onPick: (S
                     leadingIcon = { Icon(Icons.Filled.Search, null, tint = Ash) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Amber, unfocusedBorderColor = Panel2, cursorColor = Amber,
+                        focusedBorderColor = Accent, unfocusedBorderColor = Panel2, cursorColor = Accent,
                         focusedTextColor = Bone, unfocusedTextColor = Bone,
                     ),
                 )
@@ -198,7 +198,7 @@ private fun CityPicker(existing: List<String>, onDismiss: () -> Unit, onPick: (S
                                 Text(Zones.city(z), color = Bone, fontSize = 17.sp)
                                 Text(Zones.region(z), color = Ash, fontSize = 12.sp)
                             }
-                            Text(Fmt.gmt(tz, now), color = Amber, fontSize = 13.sp)
+                            Text(Fmt.gmt(tz, now), color = Accent, fontSize = 13.sp)
                         }
                     }
                 }
