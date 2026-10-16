@@ -48,7 +48,7 @@ fun PomodoroScreen(tick: Int) {
     val total = Pomodoro.phaseMs(cfg, st.phase)
     val rem = Pomodoro.remaining(st, cfg, now)
     val isFocus = st.phase == Pomodoro.FOCUS
-    val color = if (isFocus) Red else Cyan
+    val color = if (isFocus) Amber else Cyan
 
     LaunchedEffect(st.running && rem == 0L) {
         if (st.running && rem == 0L) { delay(1500); st = Pomodoro.state(ctx) }
@@ -72,7 +72,7 @@ fun PomodoroScreen(tick: Int) {
                 val done = i < st.round || (i == st.round && !isFocus)
                 Box(
                     Modifier.size(12.dp).clip(CircleShape)
-                        .background(if (done) Red else if (i == st.round) Bone else Panel2)
+                        .background(if (done) Amber else if (i == st.round) Bone else Panel2)
                 )
             }
         }
@@ -94,7 +94,7 @@ fun PomodoroScreen(tick: Int) {
         }
 
         TextButton(onClick = { customize = true }) {
-            Text("Customize  ·  ${cfg.focus} / ${cfg.short} / ${cfg.long} min", color = Red, fontSize = 15.sp)
+            Text("Customize  ·  ${cfg.focus} / ${cfg.short} / ${cfg.long} min", color = Amber, fontSize = 15.sp)
         }
         Spacer(Modifier.height(24.dp))
     }

@@ -47,8 +47,8 @@ fun StopwatchScreen(tick: Int) {
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(Modifier.height(48.dp))
         Text(
-            Fmt.stopwatch(elapsed), color = if (s.running) Red else Bone, fontFamily = Stencil, fontSize = 54.sp,
-            style = TextStyle(shadow = if (s.running) Shadow(Red, blurRadius = 24f) else null),
+            Fmt.stopwatch(elapsed), color = if (s.running) Amber else Bone, fontFamily = Stencil, fontSize = 54.sp,
+            style = TextStyle(shadow = if (s.running) Shadow(Amber, blurRadius = 24f) else null),
         )
         Spacer(Modifier.height(32.dp))
         if (s.laps.isNotEmpty()) {

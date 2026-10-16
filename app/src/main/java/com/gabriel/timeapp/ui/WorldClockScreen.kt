@@ -93,7 +93,9 @@ fun WorldClockScreen(tick: Int, glitch: Boolean, addPending: Boolean, consumeAdd
             Column(Modifier.fillMaxWidth().padding(vertical = 28.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 SectionLabel("Local time")
                 Spacer(Modifier.height(8.dp))
-                GlitchText(Fmt.clock(now, is24, seconds = true), if (is24) 54.sp else 58.sp, glitch)
+                Reticle {
+                    GlitchText(Fmt.clock(now, is24, seconds = true), if (is24) 48.sp else 52.sp, glitch)
+                }
                 Text(
                     Fmt.date(now) + if (is24) "" else "  ·  " + Fmt.ampm(now),
                     color = Bone, fontSize = 16.sp, letterSpacing = 2.sp,
@@ -138,14 +140,14 @@ private fun CityRow(
     var menu by remember { mutableStateOf(false) }
     Box {
         Row(
-            Modifier.fillMaxWidth().padding(vertical = 5.dp).clip(RoundedCornerShape(20.dp)).background(Panel)
+            Modifier.fillMaxWidth().padding(vertical = 5.dp).hudPanel()
                 .combinedClickable(onClick = {}, onLongClick = { menu = true })
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
-                Text(Zones.city(z), color = Bone, fontSize = 18.sp, maxLines = 1)
-                Text("$day · ${Fmt.offset(off)}", color = Ash, fontSize = 13.sp)
+                Text(Zones.city(z).uppercase(), color = Bone, fontSize = 19.sp, letterSpacing = 1.sp, maxLines = 1)
+                Text("$day · ${Fmt.offset(off)}".uppercase(), color = Cyan, fontFamily = Mono, fontSize = 11.sp, letterSpacing = 1.sp)
             }
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(Fmt.clock(now, is24, tz), color = Bone, fontFamily = Stencil, fontSize = 32.sp)
@@ -155,7 +157,7 @@ private fun CityRow(
         DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
             if (canUp) DropdownMenuItem(text = { Text("Move up") }, onClick = { menu = false; onUp() })
             if (canDown) DropdownMenuItem(text = { Text("Move down") }, onClick = { menu = false; onDown() })
-            DropdownMenuItem(text = { Text("Remove", color = Red) }, onClick = { menu = false; onRemove() })
+            DropdownMenuItem(text = { Text("Remove", color = Amber) }, onClick = { menu = false; onRemove() })
         }
     }
 }
@@ -181,7 +183,7 @@ private fun CityPicker(existing: List<String>, onDismiss: () -> Unit, onPick: (S
                     leadingIcon = { Icon(Icons.Filled.Search, null, tint = Ash) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Red, unfocusedBorderColor = Panel2, cursorColor = Red,
+                        focusedBorderColor = Amber, unfocusedBorderColor = Panel2, cursorColor = Amber,
                         focusedTextColor = Bone, unfocusedTextColor = Bone,
                     ),
                 )
@@ -196,7 +198,7 @@ private fun CityPicker(existing: List<String>, onDismiss: () -> Unit, onPick: (S
                                 Text(Zones.city(z), color = Bone, fontSize = 17.sp)
                                 Text(Zones.region(z), color = Ash, fontSize = 12.sp)
                             }
-                            Text(Fmt.gmt(tz, now), color = Red, fontSize = 13.sp)
+                            Text(Fmt.gmt(tz, now), color = Amber, fontSize = 13.sp)
                         }
                     }
                 }

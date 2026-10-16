@@ -93,11 +93,16 @@ fun AlarmScreen(tick: Int, addPending: Boolean, consumeAdd: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (next == null) {
-                    Text("All alarms are off", color = Ash, fontSize = 18.sp)
+                    SectionLabel("Next alarm", color = Ash)
+                    Spacer(Modifier.height(8.dp))
+                    Text("ALL ALARMS OFF", color = Ash, fontFamily = Stencil, fontSize = 26.sp)
                 } else {
-                    Text("Alarm in", color = Ash, fontSize = 16.sp)
-                    Spacer(Modifier.height(6.dp))
-                    GlitchText(Fmt.untilShort(next - now), 40.sp, Store.settings(ctx).glitch)
+                    SectionLabel("Next alarm")
+                    Spacer(Modifier.height(4.dp))
+                    Reticle {
+                        GlitchText(Fmt.tminus(next - now), 40.sp, Store.settings(ctx).glitch)
+                    }
+                    Text("RINGS IN " + Fmt.untilShort(next - now).uppercase(), color = Ash, fontFamily = Mono, fontSize = 12.sp, letterSpacing = 2.sp)
                 }
             }
         }
@@ -140,7 +145,7 @@ fun AlarmScreen(tick: Int, addPending: Boolean, consumeAdd: () -> Unit) {
                 TextButton(onClick = {
                     AlarmScheduler.cancel(ctx, d.id); Store.deleteAlarm(ctx, d.id)
                     alarms = Store.alarms(ctx); deleting = null
-                }) { Text("Delete", color = Red) }
+                }) { Text("Delete", color = Amber) }
             },
             dismissButton = { TextButton(onClick = { deleting = null }) { Text("Cancel", color = Bone) } },
             containerColor = Panel,
@@ -152,7 +157,7 @@ fun AlarmScreen(tick: Int, addPending: Boolean, consumeAdd: () -> Unit) {
 private fun AlarmCard(a: Alarm, is24: Boolean, now: Long, onClick: () -> Unit, onLongClick: () -> Unit, onToggle: (Boolean) -> Unit) {
     val on = a.enabled
     Row(
-        Modifier.fillMaxWidth().padding(vertical = 5.dp).clip(RoundedCornerShape(20.dp)).background(Panel)
+        Modifier.fillMaxWidth().padding(vertical = 5.dp).hudPanel()
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .padding(horizontal = 20.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -168,7 +173,7 @@ private fun AlarmCard(a: Alarm, is24: Boolean, now: Long, onClick: () -> Unit, o
             }
         }
         Text(
-            Fmt.days(a, now), color = if (on) Red else Ash, fontSize = 13.sp,
+            Fmt.days(a, now), color = if (on) Amber else Ash, fontSize = 13.sp,
             modifier = Modifier.padding(end = 12.dp),
         )
         Switch(checked = on, onCheckedChange = onToggle, colors = appSwitchColors())
@@ -201,12 +206,12 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
                             clockDialColor = Panel,
                             clockDialSelectedContentColor = Bg,
                             clockDialUnselectedContentColor = Bone,
-                            selectorColor = Red,
-                            periodSelectorBorderColor = Red,
-                            periodSelectorSelectedContainerColor = Red,
+                            selectorColor = Amber,
+                            periodSelectorBorderColor = Amber,
+                            periodSelectorSelectedContainerColor = Amber,
                             periodSelectorSelectedContentColor = Bg,
                             periodSelectorUnselectedContentColor = Ash,
-                            timeSelectorSelectedContainerColor = Red,
+                            timeSelectorSelectedContainerColor = Amber,
                             timeSelectorSelectedContentColor = Bg,
                             timeSelectorUnselectedContainerColor = Panel,
                             timeSelectorUnselectedContentColor = Bone,
@@ -219,7 +224,7 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
                         listOf("M", "T", "W", "T", "F", "S", "S").forEachIndexed { i, d ->
                             val sel = (days and (1 shl i)) != 0
                             Box(
-                                Modifier.size(40.dp).clip(CircleShape).background(if (sel) Red else Panel)
+                                Modifier.size(40.dp).clip(androidx.compose.foundation.shape.CutCornerShape(8.dp)).background(if (sel) Amber else Panel)
                                     .clickable { days = days xor (1 shl i) },
                                 contentAlignment = Alignment.Center,
                             ) { Text(d, color = if (sel) Bg else Bone, fontSize = 15.sp) }
@@ -236,8 +241,8 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
                         label = { Text("Alarm name") }, singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Red, unfocusedBorderColor = Panel2,
-                            focusedLabelColor = Red, unfocusedLabelColor = Ash, cursorColor = Red,
+                            focusedBorderColor = Amber, unfocusedBorderColor = Panel2,
+                            focusedLabelColor = Amber, unfocusedLabelColor = Ash, cursorColor = Amber,
                             focusedTextColor = Bone, unfocusedTextColor = Bone,
                         ),
                     )
@@ -258,7 +263,7 @@ private fun AlarmEditor(initial: Alarm, is24: Boolean, onDismiss: () -> Unit, on
                     }
                 }
                 Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    if (onDelete != null) TextButton(onClick = onDelete) { Text("Delete", color = Red, fontSize = 16.sp) }
+                    if (onDelete != null) TextButton(onClick = onDelete) { Text("Delete", color = Amber, fontSize = 16.sp) }
                     Spacer(Modifier.weight(1f))
                     TextButton(onClick = onDismiss) { Text("Cancel", color = Bone, fontSize = 16.sp) }
                     Spacer(Modifier.size(8.dp))

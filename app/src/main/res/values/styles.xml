@@ -10,7 +10,7 @@
         <item name="android:navigationBarColor">@android:color/black</item>
     </style>
     <style name="Label">
-        <item name="android:textColor">#FF2A2A</item>
+        <item name="android:textColor">#FFB23E</item>
         <item name="android:textSize">13sp</item>
         <item name="android:fontFamily">@font/share_tech_mono</item>
         <item name="android:letterSpacing">0.2</item>

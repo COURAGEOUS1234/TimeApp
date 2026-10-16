@@ -23,7 +23,7 @@ import kotlin.random.Random
 class StandbyClockView(c: Context, a: AttributeSet? = null) : View(c, a) {
     private val timeP = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         typeface = c.resources.getFont(R.font.black_ops_one)
-        color = 0xFFB01E1E.toInt(); textAlign = Paint.Align.CENTER
+        color = 0xFFB07A20.toInt(); textAlign = Paint.Align.CENTER
     }
     private val subP = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         typeface = c.resources.getFont(R.font.share_tech_mono)

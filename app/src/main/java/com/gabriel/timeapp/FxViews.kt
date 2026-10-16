@@ -10,7 +10,7 @@ import android.view.View
 /** CRT scanlines drawn over the whole screen. */
 class ScanlineView(c: Context, a: AttributeSet?) : View(c, a) {
     private val p = Paint().apply { color = 0x22000000; strokeWidth = 2f }
-    private val tint = Paint().apply { color = 0x0AFF2A2A }
+    private val tint = Paint().apply { color = 0x0AFFB23E }
     override fun onDraw(canvas: Canvas) {
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), tint)
         var y = 0f
@@ -20,7 +20,7 @@ class ScanlineView(c: Context, a: AttributeSet?) : View(c, a) {
 
 /** Black/red diagonal hazard tape. */
 class HazardStripeView(c: Context, a: AttributeSet?) : View(c, a) {
-    private val red = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFD7261E.toInt() }
+    private val red = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFD9A030.toInt() }
     override fun onDraw(canvas: Canvas) {
         canvas.drawColor(0xFF0A0A0A.toInt())
         val h = height.toFloat(); val w = h * 0.9f

@@ -69,6 +69,12 @@ object Fmt {
         }.joinToString(" ")
     }
 
+    /** "T-07:12", or "T-1D 03:12" beyond a day. */
+    fun tminus(deltaMs: Long): String {
+        val (d, h, m) = parts(deltaMs)
+        return if (d > 0) "T-%dD %02d:%02d".format(d, h, m) else "T-%02d:%02d".format(h, m)
+    }
+
     fun days(a: Alarm, now: Long): String {
         if (a.days == 0) {
             val dayNow = (now + TimeZone.getDefault().getOffset(now)) / 86_400_000L

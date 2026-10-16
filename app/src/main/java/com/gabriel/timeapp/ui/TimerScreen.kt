@@ -89,7 +89,7 @@ fun TimerScreen(tick: Int) {
                 presets.forEach { p ->
                     Text(
                         Fmt.hms(p), color = Bone, fontFamily = Stencil, fontSize = 18.sp,
-                        modifier = Modifier.clip(RoundedCornerShape(16.dp)).background(Panel)
+                        modifier = Modifier.hudPanel(cut = 6.dp)
                             .combinedClickable(
                                 onClick = {
                                     val s = p / 1000
@@ -102,8 +102,8 @@ fun TimerScreen(tick: Int) {
                 }
                 if (totalSet > 0 && totalSet !in presets) {
                     Text(
-                        "+ Save current", color = Red, fontSize = 15.sp,
-                        modifier = Modifier.clip(RoundedCornerShape(16.dp)).background(Panel2)
+                        "+ Save current", color = Amber, fontSize = 15.sp,
+                        modifier = Modifier.hudPanel(cut = 6.dp)
                             .combinedClickable(onClick = {
                                 presets = (presets + totalSet).sorted(); Store.saveTimerPresets(ctx, presets)
                             })
@@ -129,7 +129,7 @@ fun TimerScreen(tick: Int) {
     } else {
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.weight(1f))
-            Ring(remaining.toFloat() / max(1L, t.total), Red, 280.dp) {
+            Ring(remaining.toFloat() / max(1L, t.total), Amber, 280.dp) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(Fmt.countdown(remaining), color = Bone, fontFamily = Stencil, fontSize = 48.sp)
                     val endAt = if (t.running) t.endAt else System.currentTimeMillis() + t.remaining

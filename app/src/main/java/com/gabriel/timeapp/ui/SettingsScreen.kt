@@ -81,10 +81,10 @@ fun SettingsScreen(onStandby: () -> Unit, onDismiss: () -> Unit) {
                         color = Ash, fontSize = 13.sp,
                     )
                     ToggleRow("Dim screen", s.standbyDim, "Lowest brightness in standby and screen saver") { set(s.copy(standbyDim = it)) }
-                    TextButton(onClick = onStandby) { Text("Start standby mode", color = Red, fontSize = 16.sp) }
+                    TextButton(onClick = onStandby) { Text("Start standby mode", color = Amber, fontSize = 16.sp) }
                     Text("Keeps the screen on with a dim clock. Double-tap to exit. Best used while charging.", color = Ash, fontSize = 12.sp)
                     TextButton(onClick = { open(Intent(AndroidSettings.ACTION_DREAM_SETTINGS)) }) {
-                        Text("Set up screen saver while charging", color = Red, fontSize = 16.sp)
+                        Text("Set up screen saver while charging", color = Amber, fontSize = 16.sp)
                     }
                     Text("Choose Terminal Hour as the screen saver. It then appears automatically while the phone charges.", color = Ash, fontSize = 12.sp)
 
@@ -92,7 +92,7 @@ fun SettingsScreen(onStandby: () -> Unit, onDismiss: () -> Unit) {
                     SectionLabel("System")
                     TextButton(onClick = {
                         open(Intent(AndroidSettings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(AndroidSettings.EXTRA_APP_PACKAGE, ctx.packageName))
-                    }) { Text("Notification settings", color = Red, fontSize = 16.sp) }
+                    }) { Text("Notification settings", color = Amber, fontSize = 16.sp) }
 
                     Spacer(Modifier.height(20.dp))
                     SectionLabel("About")

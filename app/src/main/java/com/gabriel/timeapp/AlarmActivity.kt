@@ -34,7 +34,7 @@ class AlarmActivity : Activity() {
     private val flash = object : Runnable {
         override fun run() {
             flashOn = !flashOn
-            root.setBackgroundColor(if (flashOn) 0xFF3A0000.toInt() else 0xFF070606.toInt())
+            root.setBackgroundColor(if (flashOn) 0xFF2E1E00.toInt() else 0xFF0A0D0B.toInt())
             title.alpha = if (flashOn) 1f else 0.4f
             handler.postDelayed(this, 400)
         }
