@@ -53,6 +53,11 @@ class AlarmActivity : Activity() {
             )
         }
         setContentView(R.layout.activity_alarm)
+        if (Build.VERSION.SDK_INT >= 33) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) { /* swallow: use Dismiss or Snooze */ }
+        }
         root = findViewById(R.id.alarmRoot)
         title = findViewById(R.id.alertTitle)
 
