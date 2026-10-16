@@ -1,0 +1,3 @@
+Bundled fonts (res/font): Black Ops One, Dela Gothic One, Share Tech Mono.
+All are licensed under the SIL Open Font License 1.1 (https://openfontlicense.org)
+and distributed via Google Fonts. Free to bundle in apps, including commercial ones.

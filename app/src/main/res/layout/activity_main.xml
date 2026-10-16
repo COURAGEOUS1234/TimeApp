@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#070606">
+
+    <!-- Huge faint kanji backdrop: 終 = "end" -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="終"
+        android:textColor="#1AFF2A2A"
+        android:textSize="380sp"
+        android:fontFamily="@font/dela_gothic_one" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.gabriel.timeapp.HazardStripeView
+            android:layout_width="match_parent"
+            android:layout_height="18dp" />
+
+        <TextView
+            style="@style/Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="終末時計 // DOOMSDAY CHRONOMETER  ▮ SYS.ONLINE" />
+
+        <Space android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+
+        <TextView
+            style="@style/Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="現地時刻 — LOCAL TIME" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- cyan ghost for glitch split -->
+            <TextClock
+                android:id="@+id/ghostClock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:alpha="0"
+                android:format12Hour="h:mm:ss"
+                android:format24Hour="HH:mm:ss"
+                android:textColor="#00E5FF"
+                android:textSize="72sp"
+                android:fontFamily="@font/black_ops_one" />
+            <TextClock
+                android:id="@+id/mainClock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:format12Hour="h:mm:ss"
+                android:format24Hour="HH:mm:ss"
+                android:textColor="#FF2A2A"
+                android:shadowColor="#FF2A2A"
+                android:shadowRadius="28"
+                android:textSize="72sp"
+                android:fontFamily="@font/black_ops_one" />
+        </FrameLayout>
+
+        <TextClock
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:format12Hour="yyyy.MM.dd  EEE  a"
+            android:format24Hour="yyyy.MM.dd  EEE"
+            android:textAllCaps="true"
+            android:textColor="#B8AFA3"
+            android:textSize="16sp"
+            android:fontFamily="@font/share_tech_mono"
+            android:letterSpacing="0.15" />
+
+        <Space android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical"
+                android:background="#14FF2A2A" android:padding="12dp"
+                android:layout_marginEnd="8dp">
+                <TextView style="@style/Label" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="東京 // TOKYO" />
+                <TextClock style="@style/ZoneClock" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:timeZone="Asia/Tokyo" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical"
+                android:background="#14FF2A2A" android:padding="12dp"
+                android:layout_marginStart="8dp">
+                <TextView style="@style/Label" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="協定世界時 // UTC" />
+                <TextClock style="@style/ZoneClock" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:timeZone="UTC" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/alarmBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/alarm_frame"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="14dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="警報"
+                android:textColor="#FF2A2A"
+                android:textSize="26sp"
+                android:fontFamily="@font/dela_gothic_one" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="14dp"
+                android:orientation="vertical">
+                <TextView style="@style/Label" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="ALARM // TAP SET · HOLD CLEAR" />
+                <TextView
+                    android:id="@+id/alarmTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--:--"
+                    android:textColor="#F2E9DC"
+                    android:textSize="28sp"
+                    android:fontFamily="@font/black_ops_one" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/alarmState"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▯ DISARMED" />
+        </LinearLayout>
+
+        <com.gabriel.timeapp.HazardStripeView
+            android:layout_width="match_parent"
+            android:layout_height="18dp" />
+    </LinearLayout>
+
+    <com.gabriel.timeapp.ScanlineView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false"
+        android:importantForAccessibility="no" />
+</FrameLayout>

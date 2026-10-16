@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alarmRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#070606">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.gabriel.timeapp.HazardStripeView
+            android:layout_width="match_parent"
+            android:layout_height="28dp" />
+
+        <Space android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/warnKanji"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="警告"
+            android:textColor="#FF2A2A"
+            android:shadowColor="#FF2A2A"
+            android:shadowRadius="30"
+            android:textSize="110sp"
+            android:fontFamily="@font/dela_gothic_one" />
+
+        <TextView
+            style="@style/Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="▲ WARNING // TEMPORAL BREACH ▲" />
+
+        <TextClock
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:format12Hour="h:mm"
+            android:format24Hour="HH:mm"
+            android:textColor="#F2E9DC"
+            android:textSize="64sp"
+            android:fontFamily="@font/black_ops_one" />
+
+        <Space android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/dismiss"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginHorizontal="24dp"
+            android:background="#FF2A2A"
+            android:text="解除 // TERMINATE"
+            android:textColor="#070606"
+            android:textSize="20sp"
+            android:fontFamily="@font/dela_gothic_one" />
+
+        <Button
+            android:id="@+id/snooze"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/alarm_frame"
+            android:text="延期 // DELAY 5 MIN"
+            android:textColor="#FF2A2A"
+            android:textSize="16sp"
+            android:fontFamily="@font/share_tech_mono" />
+
+        <com.gabriel.timeapp.HazardStripeView
+            android:layout_width="match_parent"
+            android:layout_height="28dp" />
+    </LinearLayout>
+
+    <com.gabriel.timeapp.ScanlineView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false" />
+</FrameLayout>
